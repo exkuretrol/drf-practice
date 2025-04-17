@@ -39,9 +39,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "api",
     "core",
-    "django_extensions",
     "rest_framework",
 ]
+
+if DEBUG:
+    INSTALLED_APPS += [
+        "django_extensions",
+        "silk",
+    ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -51,6 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "silk.middleware.SilkyMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
