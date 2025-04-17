@@ -2,6 +2,10 @@ from django.db.models import Max
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.pagination import (
+    LimitOffsetPagination,
+    PageNumberPagination,
+)
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -29,6 +33,14 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     # starts with = means exact match
     search_fields = ["=name", "description"]
     ordering_fields = ["name", "price"]
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 2
+    pagination_class.page_query_param = "p"
+    pagination_class.page_size_query_param = "size"
+    pagination_class.max_page_size = 100
+
+    # pagination_class = LimitOffsetPagination
+    # pagination_class.default_limit = 2
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
