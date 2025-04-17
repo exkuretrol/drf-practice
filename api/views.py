@@ -39,9 +39,6 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     # Cache for 15 minutes
     @method_decorator(cache_page(60 * 15, key_prefix="product_list"))
     def list(self, request, *args, **kwargs):
-        import time
-
-        time.sleep(5)  # Simulate a long-running process
         return super().list(request, *args, **kwargs)
 
     def get_permissions(self):

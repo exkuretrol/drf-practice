@@ -12,7 +12,7 @@ urlpatterns = [
     path(
         "products/<int:product_id>/",
         views.ProductRetrieveUpdateDestroyAPIView.as_view(),
-        name="product-action",
+        name="product-detail",
     ),
     path("products/info/", views.ProductInfoAPIView.as_view(), name="product-info"),
 ]
