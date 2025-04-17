@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from . import views
 
@@ -14,6 +15,8 @@ urlpatterns = [
         name="product-action",
     ),
     path("products/info/", views.ProductInfoAPIView.as_view(), name="product-info"),
-    path("orders/", views.OrderListAPIView.as_view(), name="order-list"),
-    path("user-orders/", views.UserOrderListAPIView.as_view(), name="user-order-list"),
 ]
+
+router = DefaultRouter()
+router.register("orders", views.OrderViewSet, basename="orders")
+urlpatterns += router.urls
