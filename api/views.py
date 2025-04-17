@@ -11,6 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 from .filters import InStockFilterBackend, ProductFilter
 from .models import Order, Product
 from .serializers import (
+    OrderCreateSerializer,
     OrderSerializer,
     ProductInfoSerializer,
     ProductSerializer,
@@ -32,8 +33,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     search_fields = ["=name", "description"]
     ordering_fields = ["name", "price"]
     pagination_class = PageNumberPagination
-    pagination_class.page_size = 2
-    pagination_class.page_query_param = "p"
+    pagination_class.page_size = 5
     pagination_class.page_size_query_param = "size"
     pagination_class.max_page_size = 100
 
@@ -77,5 +77,19 @@ class ProductInfoAPIView(APIView):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.prefetch_related("items__product")
     serializer_class = OrderSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     pagination_class = None
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        return qs.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return OrderCreateSerializer
+        return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

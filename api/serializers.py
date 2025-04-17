@@ -4,9 +4,12 @@ from .models import Order, OrderItem, Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Product
         fields = (
+            "id",
             "name",
             "description",
             "price",
@@ -50,7 +53,6 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = (
             "uuid",
             "created_at",
-            "user",
             "status",
             "items",
             "total_price",
@@ -59,3 +61,43 @@ class OrderSerializer(serializers.ModelSerializer):
     def total(self, obj):
         order_items = obj.items.all()
         return sum(order_item.item_subtotal for order_item in order_items)
+
+
+class OrderCreateSerializer(serializers.ModelSerializer):
+    class OrderItemCreateSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = OrderItem
+            fields = (
+                "product",
+                "quantity",
+            )
+
+    uuid = serializers.UUIDField(read_only=True)
+    items = OrderItemCreateSerializer(many=True)
+
+    def create(self, validated_data):
+        order_items_data = validated_data.pop("items")
+        order = Order.objects.create(
+            status=Order.StatusChoices.PENDING, **validated_data
+        )
+
+        for order_item in order_items_data:
+            OrderItem.objects.create(order=order, **order_item)
+
+        return order
+
+    class Meta:
+        model = Order
+        fields = (
+            "uuid",
+            "user",
+            "status",
+            "items",
+            "created_at",
+        )
+
+        extra_kwargs = {
+            "user": {
+                "read_only": True,
+            },
+        }

@@ -44,7 +44,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8000/api/products/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODc4OTA1LCJpYXQiOjE3NDQ4Nzg2MDUsImp0aSI6ImU2ZGZkNDBhYTk4NzQxYWViOTJkODU4YmI4Yjc4ZGU4IiwidXNlcl9pZCI6MX0.wIRoTTBs-zJsAvWJnoAoC0LtU4klzob42DoWZuePfHE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODk3MTU4LCJpYXQiOjE3NDQ4OTY4NTgsImp0aSI6ImRkZjUwOTcyMmU3YTRlNDhhNzRkMGI0MDRlZDFkNDFkIiwidXNlcl9pZCI6MX0.nIXax-K0TpJqs-s1RDyBZVTuKWFp_-T9vU51Ug3rA5M
 
 {
     "name": "New Product 3",
@@ -59,7 +59,44 @@ POST http://localhost:8000/api/token HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "admin",
+    "username": "kuaz",
     "password": "test"
 }
 
+###
+
+GET http://localhost:8000/api/orders/ HTTP/1.1
+
+###
+
+GET http://localhost:8000/api/orders/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODk4NTMyLCJpYXQiOjE3NDQ4OTgyMzIsImp0aSI6ImMzYWRiOTk2YjU3MTQzZTk5NGE5ZGIwNzIyYzIzNGQxIiwidXNlcl9pZCI6Mn0.Z2BkE8ND7xa5_yy2ZRuYy8rhCdpJzdNxJWwNV1AMByg
+
+###
+PUT http://localhost:8000/api/orders/76ba192a-9c3a-46aa-981a-0632823eae5a/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODk3MTU4LCJpYXQiOjE3NDQ4OTY4NTgsImp0aSI6ImRkZjUwOTcyMmU3YTRlNDhhNzRkMGI0MDRlZDFkNDFkIiwidXNlcl9pZCI6MX0.nIXax-K0TpJqs-s1RDyBZVTuKWFp_-T9vU51Ug3rA5M
+
+{
+    "uuid": "76ba192a-9c3a-46aa-981a-0632823eae5a",
+    "status": "Cancelled"
+}
+
+###
+
+POST http://localhost:8000/api/orders/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODk4NTMyLCJpYXQiOjE3NDQ4OTgyMzIsImp0aSI6ImMzYWRiOTk2YjU3MTQzZTk5NGE5ZGIwNzIyYzIzNGQxIiwidXNlcl9pZCI6Mn0.Z2BkE8ND7xa5_yy2ZRuYy8rhCdpJzdNxJWwNV1AMByg
+
+{
+    "items": [
+        {
+            "product": 21,
+            "quantity": 2000
+        },
+        {
+            "product": 22,
+            "quantity": 1000
+        }
+    ]
+}
