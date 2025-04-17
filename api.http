@@ -1,4 +1,27 @@
+
 GET http://localhost:8000/api/products/ HTTP/1.1
+
+###
+
+GET http://localhost:8000/api/products/17/ HTTP/1.1
+
+###
+
+PUT http://localhost:8000/api/products/17/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODgwNzI2LCJpYXQiOjE3NDQ4ODA0MjYsImp0aSI6IjE3MTlhZGM4OWE0NjRlZTliZjYzZDc4NTdkZjllOGIyIiwidXNlcl9pZCI6MX0.dp0JFr3ZwuvNde3aKff48wNejsihYSBA0T0A5HXcR2Y
+
+{
+  "name": "Sixth product",
+  "description": "amazing product!!!!",
+  "price": "999.00",
+  "stock": 1
+}
+
+###
+
+DELETE http://localhost:8000/api/products/18/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODgwNzI2LCJpYXQiOjE3NDQ4ODA0MjYsImp0aSI6IjE3MTlhZGM4OWE0NjRlZTliZjYzZDc4NTdkZjllOGIyIiwidXNlcl9pZCI6MX0.dp0JFr3ZwuvNde3aKff48wNejsihYSBA0T0A5HXcR2Y
 
 ###
 
