@@ -11,7 +11,7 @@ urlpatterns = [
         views.ProductDetailAPIView.as_view(),
         name="product-detail",
     ),
-    path("products/info/", views.product_info, name="product-info"),
+    path("products/info/", views.ProductInfoAPIView.as_view(), name="product-info"),
     path("orders/", views.OrderListAPIView.as_view(), name="order-list"),
     path("user-orders/", views.UserOrderListAPIView.as_view(), name="user-order-list"),
 ]
