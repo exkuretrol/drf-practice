@@ -2,6 +2,7 @@ from django.db.models import Max
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Order, Product
@@ -32,6 +33,7 @@ class OrderListAPIView(generics.ListAPIView):
 class UserOrderListAPIView(generics.ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         qs = super().get_queryset()
