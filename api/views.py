@@ -1,4 +1,6 @@
 from django.db.models import Max
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -32,10 +34,15 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     # starts with = means exact match
     search_fields = ["=name", "description"]
     ordering_fields = ["name", "price"]
-    pagination_class = PageNumberPagination
-    pagination_class.page_size = 5
-    pagination_class.page_size_query_param = "size"
-    pagination_class.max_page_size = 100
+    pagination_class = None
+
+    # Cache for 15 minutes
+    @method_decorator(cache_page(60 * 15, key_prefix="product_list"))
+    def list(self, request, *args, **kwargs):
+        import time
+
+        time.sleep(5)  # Simulate a long-running process
+        return super().list(request, *args, **kwargs)
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
