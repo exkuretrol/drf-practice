@@ -161,6 +161,17 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "api.throttles.BurstRateThrottle",
+        "api.throttles.SustainedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "50/minute",
+        "burst": "100/minute",
+        "sustained": "1000/day",
+        "orders": "10/minute",
+    },
     "PAGE_SIZE": 5,
 }
 
