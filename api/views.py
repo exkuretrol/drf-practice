@@ -1,5 +1,6 @@
 from django.db.models import Max
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -11,35 +12,33 @@ from .serializers import (
 )
 
 
-@api_view(["GET"])
-def produce_list(request):
-    products = Product.objects.all()
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
+class ProductListAPIView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 
-@api_view(["GET"])
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+class ProductDetailAPIView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_url_kwarg = "product_id"
+    lookup_field = "id"
 
-    serializer = ProductSerializer(product)
-    return Response(serializer.data)
+
+class OrderListAPIView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
 
 @api_view(["GET"])
 def product_info(request):
     products = Product.objects.all()
-    counts = products.count()
+    counts = len(products)
     max_price = products.aggregate(max_price=Max("price"))["max_price"]
-
     serializer = ProductInfoSerializer(
-        {"products": products, "counts": counts, "max_price": max_price}
+        {
+            "products": products,
+            "counts": counts,
+            "max_price": max_price,
+        }
     )
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-def order_list(request):
-    order = Order.objects.all()
-    serializer = OrderSerializer(order, many=True)
     return Response(serializer.data)
