@@ -188,3 +188,12 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
+
+
+# Celery settings
+CELERY_BROKER_URL = "redis://localhost:6379/1"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+
+
+# Email settings
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
