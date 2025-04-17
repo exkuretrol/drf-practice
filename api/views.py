@@ -11,7 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 from .filters import InStockFilterBackend, OrderFilter, ProductFilter
 from .models import Order, Product
 from .serializers import (
-    OrderCreateSerializer,
+    OrderCreateUpdateSerializer,
     OrderSerializer,
     ProductInfoSerializer,
     ProductSerializer,
@@ -89,8 +89,8 @@ class OrderViewSet(ModelViewSet):
         return qs.filter(user=self.request.user)
 
     def get_serializer_class(self):
-        if self.action == "create":
-            return OrderCreateSerializer
+        if self.action in ["create", "update"]:
+            return OrderCreateUpdateSerializer
         return super().get_serializer_class()
 
     def perform_create(self, serializer):

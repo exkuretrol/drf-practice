@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import serializers
 
 from .models import Order, OrderItem, Product
@@ -63,7 +64,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return sum(order_item.item_subtotal for order_item in order_items)
 
 
-class OrderCreateSerializer(serializers.ModelSerializer):
+class OrderCreateUpdateSerializer(serializers.ModelSerializer):
     class OrderItemCreateSerializer(serializers.ModelSerializer):
         class Meta:
             model = OrderItem
@@ -73,16 +74,34 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             )
 
     uuid = serializers.UUIDField(read_only=True)
-    items = OrderItemCreateSerializer(many=True)
+    items = OrderItemCreateSerializer(many=True, required=False)
+
+    def update(self, instance, validated_data):
+        order_items_data = validated_data.pop("items", None)
+        with transaction.atomic():
+            order = super().update(instance, validated_data)
+
+            if order_items_data is not None:
+                order.items.all().delete()
+
+                for order_item in order_items_data:
+                    OrderItem.objects.create(order=order, **order_item)
+
+        return order
 
     def create(self, validated_data):
-        order_items_data = validated_data.pop("items")
-        order = Order.objects.create(
-            status=Order.StatusChoices.PENDING, **validated_data
-        )
+        order_items_data = validated_data.pop("items", None)
 
-        for order_item in order_items_data:
-            OrderItem.objects.create(order=order, **order_item)
+        if order_items_data is None or not order_items_data:
+            raise serializers.ValidationError(detail="Order items are required.")
+
+        with transaction.atomic():
+            order = Order.objects.create(
+                status=Order.StatusChoices.PENDING, **validated_data
+            )
+
+            for order_item in order_items_data:
+                OrderItem.objects.create(order=order, **order_item)
 
         return order
 
