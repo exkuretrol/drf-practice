@@ -1,7 +1,7 @@
 import django_filters as filters
 from rest_framework.filters import BaseFilterBackend
 
-from .models import Product
+from .models import Order, Product
 
 
 class InStockFilterBackend(BaseFilterBackend):
@@ -15,4 +15,15 @@ class ProductFilter(filters.FilterSet):
         fields = {
             "name": ["iexact", "icontains"],
             "price": ["exact", "gte", "lte", "range"],
+        }
+
+
+class OrderFilter(filters.FilterSet):
+    created_at = filters.DateFilter(field_name="created_at", lookup_expr="date")
+
+    class Meta:
+        model = Order
+        fields = {
+            "status": ["exact"],
+            "created_at": ["gte", "lte"],
         }

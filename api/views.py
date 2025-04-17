@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from .filters import InStockFilterBackend, ProductFilter
+from .filters import InStockFilterBackend, OrderFilter, ProductFilter
 from .models import Order, Product
 from .serializers import (
     OrderCreateSerializer,
@@ -79,6 +79,8 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = None
+    filterset_class = OrderFilter
+    filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
         qs = super().get_queryset()
